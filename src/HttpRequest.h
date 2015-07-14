@@ -9,7 +9,7 @@
 #include "asio/asio.hpp"
 
 #include "cinder/app/App.h"
-#include "cinder/Json.h"
+#include "jsoncpp/Json.h"
 
 typedef	std::shared_ptr<class AsyncHttpRequest> ScopedAsyncHttpRequest;
 class AsyncHttpRequest : public std::enable_shared_from_this<AsyncHttpRequest>
@@ -19,11 +19,11 @@ public:
 	static ScopedAsyncHttpRequest create(asio::io_service &service, std::string hostname);
   
   void BeginGet(std::string path, std::function<void(std::string)>&& Callback = [](std::string s){});
-  void BeginPost(std::string path, ci::JsonTree reqData = ci::JsonTree(),
+  void BeginPost(std::string path, Json::Value reqData = Json::Value(),
                  std::function<void(std::string)>&& Callback = [](std::string){});
-	void BeginPut(std::string path, ci::JsonTree reqData = ci::JsonTree(),
+	void BeginPut(std::string path, Json::Value reqData = Json::Value(),
                 std::function<void(std::string)>&& Callback = [](std::string){});
-  void BeginDelete(std::string path, ci::JsonTree reqData = ci::JsonTree(),
+  void BeginDelete(std::string path, Json::Value reqData = Json::Value(),
                    std::function<void(std::string)>&& Callback = [](std::string){});
   
   AsyncHttpRequest(asio::io_service &service, std::string hostname);

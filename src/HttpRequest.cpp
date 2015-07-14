@@ -33,13 +33,14 @@ void AsyncHttpRequest::BeginGet(std::string path, std::function<void(std::string
               shared_from_this(), std::placeholders::_1, std::placeholders::_2));
 }
 
-void AsyncHttpRequest::BeginPost(std::string path, JsonTree reqData,
+void AsyncHttpRequest::BeginPost(std::string path, Json::Value reqData,
                                  std::function<void(std::string)>&& Callback) {
 
+  Json::FastWriter writer;
+
 	tcp::resolver::query query(_hostname, "http");
-
-  string paramstr = reqData.serialize();
-
+  string paramstr = writer.write(reqData);
+  
 	std::ostream request_stream(&_request);
 	request_stream << "POST " << path << " HTTP/1.1\r\n";
 	request_stream << "Host: " << _hostname << "\r\n";
@@ -55,11 +56,13 @@ void AsyncHttpRequest::BeginPost(std::string path, JsonTree reqData,
               std::placeholders::_1, std::placeholders::_2));
 }
 
-void AsyncHttpRequest::BeginPut(std::string path, JsonTree reqData,
+void AsyncHttpRequest::BeginPut(std::string path, Json::Value reqData,
                                 std::function<void(std::string)>&& Callback) {
 
-	std::string paramstr = reqData.serialize();
-	tcp::resolver::query	query(_hostname, "http");
+  Json::FastWriter writer;
+
+	std::string paramstr = writer.write(reqData);
+  tcp::resolver::query	query(_hostname, "http");
 
 	std::ostream request_stream(&_request);
 	request_stream << "PUT " << path << " HTTP/1.1\r\n";
@@ -75,11 +78,13 @@ void AsyncHttpRequest::BeginPut(std::string path, JsonTree reqData,
                           std::placeholders::_1, std::placeholders::_2));
 }
 
-void AsyncHttpRequest::BeginDelete(std::string path, JsonTree reqData,
+void AsyncHttpRequest::BeginDelete(std::string path, Json::Value reqData,
                                    std::function<void(std::string)>&& Callback) {
 	_callback = Callback;
+  
+  Json::FastWriter writer;
     
-  std::string paramstr = reqData.serialize();
+  std::string paramstr = writer.write(reqData);
   tcp::resolver::query	query(_hostname, "http");
 
   std::ostream request_stream(&_request);
