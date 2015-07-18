@@ -52,8 +52,8 @@ void AsyncHttpRequest::BeginPost(std::string path, Json::Value reqData,
 
 	_callback = Callback;
 	_resolver.async_resolve(query,
-		std::bind(&AsyncHttpRequest::handle_resolve, shared_from_this(),
-              std::placeholders::_1, std::placeholders::_2));
+                          std::bind(&AsyncHttpRequest::handle_resolve, shared_from_this(),
+                          std::placeholders::_1, std::placeholders::_2));
 }
 
 void AsyncHttpRequest::BeginPut(std::string path, Json::Value reqData,
@@ -69,6 +69,7 @@ void AsyncHttpRequest::BeginPut(std::string path, Json::Value reqData,
 	request_stream << "Host: " << _hostname << "\r\n";
 	request_stream << "Accept: */*\r\n";
 	request_stream << "Connection: close\r\n";
+  request_stream << "Content-Type: application/json; charset=utf-8\r\n";
 	request_stream << "Content-Length: " << paramstr.size() << "\r\n\r\n";
 	request_stream << paramstr;
 
